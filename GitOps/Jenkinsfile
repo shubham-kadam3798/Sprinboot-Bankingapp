@@ -37,7 +37,7 @@ pipeline {
                 script{
                     dir('k8s'){
                         sh """
-                            sed -i -e s/springboot-bankapp.*/springboot-bankapp:${params.DOCKER_TAG}/g deployment.yml
+                            sed -i -e s/bankapp.*/bankapp:${params.DOCKER_TAG}/g deployment.yml
                         """
                     }
                 }
