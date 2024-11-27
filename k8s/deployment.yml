@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: bankapp
-        image: madhupdevops/springboot-bankapp:v4
+        image: madhupdevops/bankapp:v4
         ports:
         - containerPort: 8080
         env:
