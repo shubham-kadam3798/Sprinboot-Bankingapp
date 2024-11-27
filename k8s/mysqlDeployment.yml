@@ -1,50 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bankapp-deployment
+  name: mysql
   namespace: bankapp-namespace
   labels:
-    app: bankapp
+    app: mysql
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bankapp
+      app: mysql
   template:
     metadata:
       labels:
-        app: bankapp
+        app: mysql
     spec:
       containers:
-      - name: bankapp
-        image: madhupdevops/bankapp:v4
+      - name: mysql
+        image: mysql:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 3306
         env:
-        - name: SPRING_DATASOURCE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: bankapp-config
-              key: SPRING_DATASOURCE_URL
-        - name: SPRING_DATASOURCE_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              name: bankapp-config
-              key: SPRING_DATASOURCE_USERNAME
-        - name: SPRING_DATASOURCE_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mysql-secret
-              key: SPRING_DATASOURCE_PASSWORD
+              key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: bankapp-config
+              key: MYSQL_DATABASE
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
         livenessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8080
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
           initialDelaySeconds: 30
           periodSeconds: 10
         readinessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8080
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
           initialDelaySeconds: 10
           periodSeconds: 5
+
