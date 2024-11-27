@@ -15,10 +15,6 @@ spec:
       labels:
         app: bankapp
     spec:
-      initContainers:
-      - name: wait-for-mysql
-        image: busybox:1.28
-        command: ['sh', '-c', 'until nc -z mysql-0.mysql-headless 3306; do echo waiting for mysql; sleep 5; done;']
       containers:
       - name: bankapp
         image: madhupdevops/springboot-bankapp:v4
