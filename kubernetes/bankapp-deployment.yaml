@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bankapp-deploy
+  name: bankapp-deploy
+  namespace: bankapp-namespace
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bankapp-deploy
+  template:
+    metadata:
+      labels:
+        app: bankapp-deploy
+    spec:
+      containers:
+      - image: madhupdevops/bankapp:v4
+        name: bankapp
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://mysql-svc.bankapp-namespace.svc.cluster.local:3306/BankDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: MYSQL_DATABASE
+          value: BankDB
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: Test@123
