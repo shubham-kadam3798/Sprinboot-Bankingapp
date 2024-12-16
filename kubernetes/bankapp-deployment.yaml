@@ -2,39 +2,39 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: bankapp-deploy
-  name: bankapp-deploy
-  namespace: bankapp-namespace
+    app: bankapp:v6
+  name: bankapp:v6
+  namespace: bankapp:v6
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: bankapp-deploy
+      app: bankapp:v6
   template:
     metadata:
       labels:
-        app: bankapp-deploy
+        app: bankapp:v6
     spec:
       containers:
-      - image: madhupdevops/bankapp:v4
-        name: bankapp
+      - image: madhupdevops/bankapp:v6
+        name: bankapp:v6
         ports:
         - containerPort: 8080
         env:
         - name: SPRING_DATASOURCE_URL
           valueFrom:
             configMapKeyRef:
-              name: bankapp-config
+              name: bankapp:v6
               key: SPRING_DATASOURCE_URL
         - name: SPRING_DATASOURCE_USERNAME
           valueFrom:
             configMapKeyRef:
-              name: bankapp-config
+              name: bankapp:v6
               key: SPRING_DATASOURCE_USERNAME
         - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:
-              name: bankapp-config
+              name: bankapp:v6
               key: MYSQL_DATABASE
         - name: SPRING_DATASOURCE_PASSWORD
           valueFrom:
