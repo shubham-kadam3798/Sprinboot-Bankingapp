@@ -241,7 +241,11 @@ sudo apt-get install trivy -y
 - <b>Go to <mark> Manage Jenkins --> Tools</mark> and search for SonarQube Scanner installations:</b>
 ![image](https://github.com/user-attachments/assets/2fdc1e56-f78c-43d2-914a-104ec2c8ea86)
 #
-- <b> Go to <mark> Manage Jenkins --> credentials</mark> and add Github credentials to push updated code from the pipeline:</b>
+- <b>Go to <mark> Manage Jenkins --> credentials</mark> and add Docker credentials to push updated the updated docker image to dockerhub.</b>
+![image](https://github.com/user-attachments/assets/77402c9c-fc2f-4df7-9a06-09f3f4c38751)
+
+#
+- <b> Again, add Github credentials to push updated code from the pipeline:</b>
 ![image](https://github.com/user-attachments/assets/4d0c1a47-621e-4aa2-a0b1-71927fcdaef4)
 > [!Note]
 > While adding github credentials add Personal Access Token in the password field.
