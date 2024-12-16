@@ -15,10 +15,6 @@
 
 ### Pre-requisites:
 #
-- Root user access
-```bash
-sudo su
-```
 > [!Note]
 > This project will be implemented on North California region (us-west-1).
 
