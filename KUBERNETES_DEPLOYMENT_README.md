@@ -282,22 +282,27 @@ sudo apt-get install trivy -y
   ```bash
   kubectl config get-contexts
   ```
-  ![image](https://github.com/user-attachments/assets/4cab99aa-cef3-45f6-9150-05004c2f09f8)
+ ![image](https://github.com/user-attachments/assets/c9afca1f-b5a3-4685-ae24-cc206a3e3ef1)
+
   - <b>Add your cluster to argocd</b>
   ```bash
-  argocd cluster add Wanderlust@wanderlust.us-west-1.eksctl.io --name wanderlust-eks-cluster
+  argocd cluster add Madhup@bankapp.us-west-1.eksctl.io --name bankapp-eks-cluster
   ```
   > [!Tip]
-  > Wanderlust@wanderlust.us-west-1.eksctl.io --> This should be your EKS Cluster Name.
+  > Madhup@bankapp.us-west-1.eksctl.io --> This should be your EKS Cluster Name.
 
-  ![image](https://github.com/user-attachments/assets/0f36aafd-bab9-4ef8-ba5d-3eb56d850604)
+ ![image](https://github.com/user-attachments/assets/1061fe66-17ec-47b7-9d2e-371f58d3fd90)
+
   - <b> Once your cluster is added to argocd, go to argocd console <mark>Settings --> Clusters</mark> and verify it</b>
-  ![image](https://github.com/user-attachments/assets/4490b632-19fd-4499-a341-fabf8488d13c)
+ ![image](https://github.com/user-attachments/assets/6aebb871-4dea-4e09-955a-a4aa43b8f4ef)
+
+
 #
 - <b>Go to <mark>Settings --> Repositories</mark> and click on <mark>Connect repo</mark> </b>
 ![image](https://github.com/user-attachments/assets/cc8728e5-546b-4c46-bd4c-538f4cd6a63d)
-![image](https://github.com/user-attachments/assets/eb3646e2-db84-4439-a11a-d4168080d9cc)
-![image](https://github.com/user-attachments/assets/a07f8703-5ef3-4524-aaa7-39a139335eb7)
+![image](https://github.com/user-attachments/assets/e665203d-0ebe-4839-af9e-f5866dce5e1b)
+![image](https://github.com/user-attachments/assets/b9b869c3-698b-4303-83cc-9ccec66542a3)
+
 > [!Note]
 > Connection should be successful
 
@@ -315,25 +320,126 @@ chmod 777 /var/run/docker.sock
 
 - <b>Now, go to <mark>Applications</mark> and click on <mark>New App</mark></b>
 
-![image](https://github.com/user-attachments/assets/ec2d7a51-d78f-4947-a90b-258944ad59a2)
+![image](https://github.com/user-attachments/assets/d5b08e06-6256-4f46-afdc-fc43a9e44562)
 
 > [!Important]
 > Make sure to click on the <mark>Auto-Create Namespace</mark> option while creating argocd application
 
-![image](https://github.com/user-attachments/assets/55dcd3c2-5424-4efb-9bee-1c12bbf7f158)
-![image](https://github.com/user-attachments/assets/3e2468ff-8cb2-4bda-a8cc-0742cd6d0cae)
+![image](https://github.com/user-attachments/assets/6a828910-41ba-4f0c-af05-19297321a41b)
+![image](https://github.com/user-attachments/assets/a3aa1d22-50ef-4eb1-97fe-9c3ffb504fc3)
 
 - <b>Congratulations, your application is deployed on AWS EKS Cluster</b>
-![image](https://github.com/user-attachments/assets/bc2d9680-fe00-49f9-81bf-93c5595c20cc)
-![image](https://github.com/user-attachments/assets/1ea9d486-656e-40f1-804d-2651efb54cf6)
-- <b>Open port 31000 and 31100 on worker node and Access it on browser</b>
+![image](https://github.com/user-attachments/assets/03f3b69a-d6e0-42ad-992e-11124e7d0898)
+
+- <b>Open port 30080 on worker node and Access it on browser</b>
 ```bash
-<worker-public-ip>:31000
+<worker-public-ip>:30080
 ```
-![image](https://github.com/user-attachments/assets/a4b2a4b4-e1aa-4b22-ac6b-f40003d0723a)
-![image](https://github.com/user-attachments/assets/06f9f1c8-094d-4d9f-a9d8-256fb18a9ae4)
-![image](https://github.com/user-attachments/assets/64394f90-8610-44c0-9f63-c3a21eb78f55)
 - <b>Email Notification</b>
 ![image](https://github.com/user-attachments/assets/0ab1ef47-f939-4618-8651-6aa9274721f4)
+
+#
+## How to monitor EKS cluster, kubernetes components and workloads using prometheus and grafana via HELM (On Master machine)
+- <p id="Monitor">Install Helm Chart</p>
+```bash
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+```
+```bash
+chmod 700 get_helm.sh
+```
+```bash
+./get_helm.sh
+```
+
+#
+-  Add Helm Stable Charts for Your Local Client
+```bash
+helm repo add stable https://charts.helm.sh/stable
+```
+
+#
+- Add Prometheus Helm Repository
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+```
+
+#
+- Create Prometheus Namespace
+```bash
+kubectl create namespace prometheus
+```
+```bash
+kubectl get ns
+```
+
+#
+- Install Prometheus using Helm
+```bash
+helm install stable prometheus-community/kube-prometheus-stack -n prometheus
+```
+
+#
+- Verify prometheus installation
+```bash
+kubectl get pods -n prometheus
+```
+
+#
+- Check the services file (svc) of the Prometheus
+```bash
+kubectl get svc -n prometheus
+```
+
+#
+- Expose Prometheus and Grafana to the external world through Node Port
+> [!Important]
+> change it from Cluster IP to NodePort after changing make sure you save the file and open the assigned nodeport to the service.
+
+```bash
+kubectl edit svc stable-kube-prometheus-sta-prometheus -n prometheus
+```
+![image](https://github.com/user-attachments/assets/90f5dc11-23de-457d-bbcb-944da350152e)
+![image](https://github.com/user-attachments/assets/ed94f40f-c1f9-4f50-a340-a68594856cc7)
+
+#
+- Verify service
+```bash
+kubectl get svc -n prometheus
+```
+
+#
+- Now,let’s change the SVC file of the Grafana and expose it to the outer world
+```bash
+kubectl edit svc stable-grafana -n prometheus
+```
+![image](https://github.com/user-attachments/assets/4a2afc1f-deba-48da-831e-49a63e1a8fb6)
+
+#
+- Check grafana service
+```bash
+kubectl get svc -n prometheus
+```
+
+#
+- Get a password for grafana
+```bash
+kubectl get secret --namespace prometheus stable-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+> [!Note]
+> Username: admin
+
+#
+- Now, view the Dashboard in Grafana
+![image](https://github.com/user-attachments/assets/d2e7ff2f-059d-48c4-92bb-9711943819c4)
+![image](https://github.com/user-attachments/assets/647b2b22-cd83-41c3-855d-7c60ae32195f)
+![image](https://github.com/user-attachments/assets/cb98a281-a4f5-46af-98eb-afdb7da6b35a)
+
+
+#
+## Clean Up
+- <b id="Clean">Delete eks cluster</b>
+```bash
+eksctl delete cluster --name=bankapp --region=us-west-1
+```
 
 #
