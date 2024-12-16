@@ -1,35 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bankapp-deployment
-  namespace: bankapp-namespace
+  name: bankapp:v5
+  namespace: bankapp:v5
   labels:
-    app: bankapp
+    app: bankapp:v5
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bankapp
+      app: bankapp:v5
   template:
     metadata:
       labels:
-        app: bankapp
+        app: bankapp:v5
     spec:
       containers:
-      - name: bankapp
-        image: madhupdevops/bankapp:v4
+      - name: bankapp:v5
+        image: madhupdevops/bankapp:v5
         ports:
         - containerPort: 8080
         env:
         - name: SPRING_DATASOURCE_URL
           valueFrom:
             configMapKeyRef:
-              name: bankapp-config
+              name: bankapp:v5
               key: SPRING_DATASOURCE_URL
         - name: SPRING_DATASOURCE_USERNAME
           valueFrom:
             configMapKeyRef:
-              name: bankapp-config
+              name: bankapp:v5
               key: SPRING_DATASOURCE_USERNAME
         - name: SPRING_DATASOURCE_PASSWORD
           valueFrom:
