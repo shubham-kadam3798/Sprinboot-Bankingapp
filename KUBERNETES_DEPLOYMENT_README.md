@@ -106,6 +106,76 @@ sudo apt-get install jenkins -y
   ```bash
   sudo systemctl restart jenkins
   ```
- 
+#
+
+- <b id="docker">Install docker (Jenkins Worker)</b>
+
+```bash
+apt install docker.io -y
+usermod -aG docker ubuntu && newgrp docker
+```
+#
+- <b id="Sonar">Install and configure SonarQube (Master machine)</b>
+```bash
+docker run -itd --name SonarQube-Server -p 9000:9000 sonarqube:lts-community
+```
+#
+- <b id="Trivy">Install Trivy (Jenkins Worker)</b>
+```bash
+sudo apt-get install wget apt-transport-https gnupg lsb-release -y
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update -y
+sudo apt-get install trivy -y
+```
+#
+- <b id="Argo">Install and Configure ArgoCD (Master Machine)</b>
+  - <b>Create argocd namespace</b>
+  ```bash
+  kubectl create namespace argocd
+  ```
+  - <b>Apply argocd manifest</b>
+  ```bash
+  kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  ```
+  - <b>Make sure all pods are running in argocd namespace</b>
+  ```bash
+  watch kubectl get pods -n argocd
+  ```
+  - <b>Install argocd CLI</b>
+  ```bash
+  curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.4.7/argocd-linux-amd64
+  ```
+  - <b>Provide executable permission</b>
+  ```bash
+  chmod +x /usr/local/bin/argocd
+  ```
+  - <b>Check argocd services</b>
+  ```bash
+  kubectl get svc -n argocd
+  ```
+  - <b>Change argocd server's service from ClusterIP to NodePort</b>
+  ```bash
+  kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
+  ```
+  - <b>Confirm service is patched or not</b>
+  ```bash
+  kubectl get svc -n argocd
+  ```
+  - <b> Check the port where ArgoCD server is running and expose it on security groups of a worker node</b>
+  ![image](https://github.com/user-attachments/assets/a2932e03-ebc7-42a6-9132-82638152197f)
+  - <b>Access it on browser, click on advance and proceed with</b>
+  ```bash
+  <public-ip-worker>:<port>
+  ```
+  ![image](https://github.com/user-attachments/assets/29d9cdbd-5b7c-44b3-bb9b-1d091d042ce3)
+  ![image](https://github.com/user-attachments/assets/08f4e047-e21c-4241-ba68-f9b719a4a39a)
+  ![image](https://github.com/user-attachments/assets/1ffa85c3-9055-49b4-aab0-0947b95f0dd2)
+  - <b>Fetch the initial password of argocd server</b>
+  ```bash
+  kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+  ```
+  - <b>Username: admin</b>
+  - <b> Now, go to <mark>User Info</mark> and update your argocd password
 #
 
