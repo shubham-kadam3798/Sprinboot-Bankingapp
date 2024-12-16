@@ -133,10 +133,6 @@ sudo apt-get install trivy -y
 ```
 #
 - <b id="Argo">Install and Configure ArgoCD</b>
-  - root user
-  ```bash
-  sudo su
-  ```
   - <b>Create argocd namespace</b>
   ```bash
   kubectl create namespace argocd
@@ -336,7 +332,6 @@ chmod 777 /var/run/docker.sock
 <worker-public-ip>:30080
 ```
 - <b>Email Notification</b>
-![image](https://github.com/user-attachments/assets/0ab1ef47-f939-4618-8651-6aa9274721f4)
 
 #
 ## How to monitor EKS cluster, kubernetes components and workloads using prometheus and grafana via HELM (On Master machine)
