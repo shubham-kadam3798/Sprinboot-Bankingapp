@@ -35,7 +35,7 @@ pipeline {
         stage("Update: Kubernetes manifest"){
             steps{
                 script{
-                    dir('k8s'){
+                    dir('kubernetes'){
                         sh """
                             sed -i -e s/bankapp.*/bankapp:${params.DOCKER_TAG}/g deployment.yml
                         """
