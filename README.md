@@ -23,7 +23,7 @@
 - **<p id="Docker">Deployment using Docker</p>**
   - Clone the repository
   ```bash
-  git clone -b DevOps https://github.com/DevMadhup/Springboot-BankApp.git
+  git clone -b DevOps https://github.com/username/Springboot-Bankingapp.git
   ```
   #
   - Install docker, docker compose and provide neccessary permission
@@ -37,12 +37,12 @@
   #
   - Move to the cloned repository
   ```bash
-  cd Springboot-BankApp
+  cd Springboot-Bankingapp
   ```
   #
   - Build the Dockerfile
   ```bash
-  docker build -t madhupdevops/springboot-bankapp .
+  docker build -t username/springboot-bankingapp .
   ```
 > [!Important]
 > Make sure to change docker build command with your DockerHub username.
@@ -54,12 +54,12 @@
   #
   - Run MYSQL container
   ```bash
-  docker run -itd --name mysql -e MYSQL_ROOT_PASSWORD=Test@123 -e MYSQL_DATABASE=BankDB --network=bankapp mysql
+  docker run -itd --name mysql -e MYSQL_ROOT_PASSWORD=Test@123 -e MYSQL_DATABASE=BankDB --network=bankingapp mysql
   ```
   #
   - Run Application container
   ```bash
-  docker run -itd --name BankApp -e SPRING_DATASOURCE_USERNAME="root" -e SPRING_DATASOURCE_URL="jdbc:mysql://mysql:3306/BankDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC" -e SPRING_DATASOURCE_PASSWORD="Test@123" --network=bankapp -p 8080:8080 madhupdevops/springboot-bankapp
+  docker run -itd --name BankingApp -e SPRING_DATASOURCE_USERNAME="root" -e SPRING_DATASOURCE_URL="jdbc:mysql://mysql:3306/BankDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC" -e SPRING_DATASOURCE_PASSWORD="Test@123" --network=bankingapp -p 8080:8080 username/springboot-bankingapp
   ```
   #
   - Verify deployment
