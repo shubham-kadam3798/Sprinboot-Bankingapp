@@ -77,5 +77,5 @@ sudo apt install python3-certbot-nginx
 certbot --version
 ```
 ```bash
-certbot --nginx -d junoon.trainwithshubham.com
+certbot --nginx -d junoon.shubhamkadam.com
 ```
